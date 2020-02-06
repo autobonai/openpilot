@@ -163,6 +163,7 @@ ThermalStatus = cereal.log.ThermalData.ThermalStatus
 
 # comment out anything you don't want to run
 managed_processes = {
+  "bridge": ("cereal/messaging", ["./bridge"]),
   "thermald": "selfdrive.thermald.thermald",
   "uploader": "selfdrive.loggerd.uploader",
   "deleter": "selfdrive.loggerd.deleter",
@@ -213,6 +214,7 @@ kill_processes = ['sensord']
 green_temp_processes = ['uploader']
 
 persistent_processes = [
+  'bridge',
   'thermald',
   'logmessaged',
   'ui',

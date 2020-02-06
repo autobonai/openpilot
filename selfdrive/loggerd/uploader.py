@@ -22,7 +22,7 @@ from common.xattr import getxattr, setxattr
 UPLOAD_ATTR_NAME = 'user.upload'
 UPLOAD_ATTR_VALUE = b'1'
 
-fake_upload = os.getenv("FAKEUPLOAD") is not None
+fake_upload = True
 
 def raise_on_thread(t, exctype):
   '''Raises an exception in the threads with id tid'''
@@ -81,6 +81,8 @@ def is_on_wifi():
     return False
 
 def is_on_hotspot():
+  return True
+
   try:
     result = subprocess.check_output(["ifconfig", "wlan0"], stderr=subprocess.STDOUT, encoding='utf8')
     result = re.findall(r"inet addr:((\d+\.){3}\d+)", result)[0][0]

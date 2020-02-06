@@ -1,23 +1,56 @@
 #!/usr/bin/env python3
-import re
-import time
+import errno
+import fcntl
 import json
-import requests
+import os
+import re
+import signal
 import subprocess
-from common.timeout import Timeout
+import sys
+import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from os.path import expanduser
 from threading import Thread
-from selfdrive.manager import unblock_stdout
+
+import requests
 
 from common.params import Params
-import os
-
-
-if __name__ == "__main__":
-  unblock_stdout()
+from common.timeout import Timeout
 
 MASTER_HOST = "testing.comma.life"
+
+
+def unblock_stdout():
+  # get a non-blocking stdout
+  child_pid, child_pty = os.forkpty()
+  if child_pid != 0: # parent
+
+    # child is in its own process group, manually pass kill signals
+    signal.signal(signal.SIGINT, lambda signum, frame: os.kill(child_pid, signal.SIGINT))
+    signal.signal(signal.SIGTERM, lambda signum, frame: os.kill(child_pid, signal.SIGTERM))
+
+    fcntl.fcntl(sys.stdout, fcntl.F_SETFL, fcntl.fcntl(sys.stdout, fcntl.F_GETFL) | os.O_NONBLOCK)
+
+    while True:
+      try:
+        dat = os.read(child_pty, 4096)
+      except OSError as e:
+        if e.errno == errno.EIO:
+          break
+        continue
+
+      if not dat:
+        break
+
+      try:
+        sys.stdout.write(dat.decode('utf8'))
+      except (OSError, IOError, UnicodeDecodeError):
+        pass
+
+    # os.wait() returns a tuple with the pid and a 16 bit value
+    # whose low byte is the signal number and whose high byte is the exit satus
+    exit_status = os.wait()[1] >> 8
+    os._exit(exit_status)
 
 
 def get_workdir():
@@ -141,6 +174,8 @@ def control_server(server_class=HTTPServer, handler_class=HTTPHandler, port=8080
 
 
 if __name__ == "__main__":
+  unblock_stdout()
+
   control_thread = Thread(target=control_server)
   control_thread.daemon = True
   control_thread.start()
