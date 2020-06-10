@@ -16,7 +16,9 @@ if platform.system() == "Darwin":
   arch = "Darwin"
 if arch == "aarch64" and not os.path.isdir("/system"):
   arch = "larch64"
-arch = "linaro" # TODO: Fix this and dont hardcode
+if subprocess.check_output(["uname", "-r"], encoding='utf8').rstrip().split('-')[-1] == "tegra":
+  print("arch == tegra")
+  arch = "tegra" #TODO: tegra is aarch64, so find better way to distinguish from c2/eon 
 
 webcam = bool(ARGUMENTS.get("use_webcam", 0))
 QCOM_REPLAY = arch == "aarch64" and os.getenv("QCOM_REPLAY") is not None
@@ -78,7 +80,7 @@ else:
       "/usr/local/lib",
       "/System/Library/Frameworks/OpenGL.framework/Libraries",
     ]
-  elif arch == "linaro":
+  elif arch == "tegra":
     libpath = [
       "#phonelibs/snpe/larch64", 
       "#phonelibs/libyuv/nx", 
