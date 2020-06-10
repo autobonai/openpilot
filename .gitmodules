@@ -12,7 +12,7 @@
 	url = ../../commaai/openpilot-apks.git
 [submodule "cereal"]
 	path = cereal
-	url = ../../commaai/cereal.git
+	url = ../../autobonai/cereal.git
 
 [submodule "rednose_repo"]
 	path = rednose_repo
