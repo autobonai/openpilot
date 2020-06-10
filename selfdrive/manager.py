@@ -18,6 +18,7 @@ from common.android import ANDROID
 WEBCAM = os.getenv("WEBCAM") is not None
 sys.path.append(os.path.join(BASEDIR, "pyextra"))
 os.environ['BASEDIR'] = BASEDIR
+os.environ['STARTED'] = "1"
 
 TOTAL_SCONS_NODES = 1140
 prebuilt = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
@@ -190,6 +191,7 @@ managed_processes = {
   "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
   "driverview": "selfdrive.monitoring.driverview",
+  "zmqbridge": ("cereal/messaging", ["./bridge"]),
 }
 
 daemon_processes = {
@@ -223,14 +225,15 @@ if ANDROID:
   persistent_processes += [
     'logcatd',
     'tombstoned',
-    'updated',
+#    'updated',
     'deleter',
+    'zmqbridge',
   ]
 
 car_started_processes = [
   'controlsd',
   'plannerd',
-  'loggerd',
+#  'loggerd',
   'radard',
   'dmonitoringd',
   'calibrationd',
@@ -553,7 +556,7 @@ def main():
     ("RecordFront", "0"),
     ("HasAcceptedTerms", "0"),
     ("HasCompletedSetup", "0"),
-    ("IsUploadRawEnabled", "1"),
+    ("IsUploadRawEnabled", "0"),
     ("IsLdwEnabled", "1"),
     ("IsGeofenceEnabled", "-1"),
     ("SpeedLimitOffset", "0"),

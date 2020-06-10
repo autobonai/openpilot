@@ -337,6 +337,7 @@ def thermald_thread():
     fw_version_match = (panda_signature is None) or (panda_signature == FW_SIGNATURE)   # don't show alert is no panda is connected (None)
 
     should_start = ignition
+    cloudlog.info("Ignition: %s", should_start)
 
     # with 2% left, we killall, otherwise the phone will take a long time to boot
     should_start = should_start and msg.thermal.freeSpace > 0.02
