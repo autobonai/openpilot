@@ -33,6 +33,7 @@ except PermissionError:
 
 if ANDROID:
   os.chmod("/dev/shm", 0o777)
+  os.system('service call wifi 37 i32 0 i32 1') # autostart tethering
 
 def unblock_stdout():
   # get a non-blocking stdout
