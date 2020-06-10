@@ -16,6 +16,7 @@ if platform.system() == "Darwin":
   arch = "Darwin"
 if arch == "aarch64" and not os.path.isdir("/system"):
   arch = "larch64"
+arch = "linaro" # TODO: Fix this and dont hardcode
 
 webcam = bool(ARGUMENTS.get("use_webcam", 0))
 QCOM_REPLAY = arch == "aarch64" and os.getenv("QCOM_REPLAY") is not None
@@ -76,6 +77,16 @@ else:
       "#selfdrive/common",
       "/usr/local/lib",
       "/System/Library/Frameworks/OpenGL.framework/Libraries",
+    ]
+  elif arch == "linaro":
+    libpath = [
+      "#phonelibs/snpe/larch64", 
+      "#phonelibs/libyuv/nx", 
+      "#external/tensorflow/lib",
+      "#cereal",
+      "#selfdrive/common",
+      "/usr/lib",
+      "/usr/local/lib",
     ]
   else:
     libpath = [
@@ -212,7 +223,6 @@ SConscript(['opendbc/can/SConscript'])
 
 SConscript(['common/SConscript'])
 SConscript(['common/kalman/SConscript'])
-SConscript(['common/transformations/SConscript'])
 SConscript(['phonelibs/SConscript'])
 
 if arch != "Darwin":
