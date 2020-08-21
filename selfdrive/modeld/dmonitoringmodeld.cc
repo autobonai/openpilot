@@ -23,7 +23,10 @@ static void set_do_exit(int sig) {
 
 int main(int argc, char **argv) {
   int err;
-  set_realtime_priority(1);
+  set_realtime_priority(51);
+
+  signal(SIGINT, (sighandler_t)set_do_exit);
+  signal(SIGTERM, (sighandler_t)set_do_exit);
 
   // messaging
   SubMaster sm({"dMonitoringState"});
@@ -53,7 +56,6 @@ int main(int argc, char **argv) {
       buf = visionstream_get(&stream, &extra);
       if (buf == NULL) {
         printf("visionstream get failed\n");
-        visionstream_destroy(&stream);
         break;
       }
       //printf("frame_id: %d %dx%d\n", extra.frame_id, buf_info.width, buf_info.height);
@@ -81,10 +83,8 @@ int main(int argc, char **argv) {
       LOGD("dmonitoring process: %.2fms, from last %.2fms", t2-t1, t1-last);
       last = t1;
     }
-
+    visionstream_destroy(&stream);
   }
-
-  visionstream_destroy(&stream);
 
   dmonitoring_free(&dmonitoringmodel);
 

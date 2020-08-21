@@ -3,7 +3,7 @@
 '''
 System tools like top/htop can only show current cpu usage values, so I write this script to do statistics jobs.
   Features:
-    Use psutil library to sample cpu usage(avergage for all cores) of OpenPilot processes, at a rate of 5 samples/sec.
+    Use psutil library to sample cpu usage(avergage for all cores) of openpilot processes, at a rate of 5 samples/sec.
     Do cpu usage statistics periodically, 5 seconds as a cycle.
     Caculate the average cpu usage within this cycle.
     Caculate minumium/maximium/accumulated_average cpu usage as long term inspections.
@@ -31,7 +31,7 @@ SLEEP_INTERVAL = 0.2
 
 monitored_proc_names = [
   'ubloxd', 'thermald', 'uploader', 'deleter', 'controlsd', 'plannerd', 'radard', 'mapd', 'loggerd', 'logmessaged', 'tombstoned',
-  'logcatd', 'proclogd', 'boardd', 'pandad', './ui', 'ui', 'calibrationd', 'params_learner', 'modeld', 'dmonitoringmodeld', 'camerad', 'sensord', 'updated', 'gpsd', 'athena']
+  'logcatd', 'proclogd', 'boardd', 'pandad', './ui', 'ui', 'calibrationd', 'params_learner', 'modeld', 'dmonitoringd', 'dmonitoringmodeld', 'camerad', 'sensord', 'updated', 'gpsd', 'athena', 'locationd', 'paramsd']
 cpu_time_names = ['user', 'system', 'children_user', 'children_system']
 
 timer = getattr(time, 'monotonic', time.time)

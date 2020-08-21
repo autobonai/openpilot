@@ -1,15 +1,17 @@
-README.md
-SAFETY.md
-
 .gitignore
 LICENSE
+launch.sh
+launch_env.sh
 launch_chffrplus.sh
 launch_openpilot.sh
 
-CONTRIBUTING.md
-RELEASES.md
-
+Jenkinsfile
 SConstruct
+
+CONTRIBUTING.md
+README.md
+RELEASES.md
+SAFETY.md
 
 apk/ai.comma*.apk
 
@@ -26,7 +28,6 @@ common/numpy_fast.py
 common/params.py
 common/xattr.py
 common/profiler.py
-common/testing.py
 common/basedir.py
 common/filter_simple.py
 common/stat_live.py
@@ -36,7 +37,6 @@ common/cython_hacks.py
 common/apk.py
 common/SConscript
 common/common_pyx_setup.py
-common/manager_helpers.py
 
 common/kalman/.gitignore
 common/kalman/*
@@ -60,6 +60,8 @@ common/api/__init__.py
 
 models/supercombo.dlc
 models/dmonitoring_model_q.dlc
+
+release/build_release2.sh
 
 selfdrive/version.py
 
@@ -87,6 +89,10 @@ selfdrive/boardd/boardd.py
 selfdrive/boardd/boardd_api_impl.pyx
 selfdrive/boardd/boardd_setup.py
 selfdrive/boardd/can_list_to_can_capnp.cc
+selfdrive/boardd/panda.cc
+selfdrive/boardd/panda.h
+selfdrive/boardd/pigeon.cc
+selfdrive/boardd/pigeon.h
 
 selfdrive/car/__init__.py
 selfdrive/car/car_helpers.py
@@ -207,6 +213,8 @@ selfdrive/common/visionimg.cc
 selfdrive/common/visionimg.h
 selfdrive/common/spinner.c
 selfdrive/common/spinner.h
+selfdrive/common/gpio.cc
+selfdrive/common/gpio.h
 
 
 selfdrive/controls/__init__.py
@@ -279,12 +287,6 @@ selfdrive/locationd/models/constants.py
 selfdrive/locationd/calibrationd.py
 selfdrive/locationd/calibration_helpers.py
 
-selfdrive/locationd/locationd_yawrate.cc
-selfdrive/locationd/locationd_yawrate.h
-selfdrive/locationd/params_learner.cc
-selfdrive/locationd/params_learner.h
-selfdrive/locationd/paramsd.cc
-
 selfdrive/logcatd/SConscript
 selfdrive/logcatd/logcatd.cc
 
@@ -317,14 +319,14 @@ selfdrive/thermald/thermald.py
 selfdrive/thermald/power_monitoring.py
 
 selfdrive/test/__init__.py
+selfdrive/test/helpers.py
+selfdrive/test/setup_device_ci.sh
 selfdrive/test/test_openpilot.py
 selfdrive/test/test_fingerprints.py
-selfdrive/test/test_car_models.py
+selfdrive/test/test_cpu_usage.py
 
 selfdrive/ui/SConscript
-selfdrive/ui/*.c
 selfdrive/ui/*.cc
-selfdrive/ui/*.h
 selfdrive/ui/*.hpp
 selfdrive/ui/ui
 selfdrive/ui/spinner/Makefile
@@ -334,6 +336,9 @@ selfdrive/ui/spinner/spinner.c
 selfdrive/ui/text/Makefile
 selfdrive/ui/text/text
 selfdrive/ui/text/text.c
+
+selfdrive/ui/qt/*.cc
+selfdrive/ui/qt/*.hpp
 
 selfdrive/camerad/SConscript
 selfdrive/camerad/main.cc
@@ -388,7 +393,6 @@ selfdrive/modeld/runners/run.h
 
 selfdrive/monitoring/dmonitoringd.py
 selfdrive/monitoring/driver_monitor.py
-selfdrive/monitoring/driverview.py
 
 selfdrive/assets
 selfdrive/assets/fonts/*.ttf
@@ -423,12 +427,13 @@ phonelibs/android_system_core/**
 installer/updater/updater
 installer/updater/updater.cc
 installer/updater/update.json
+installer/updater/update_kernel.json
 installer/updater/Makefile
 
 scripts/update_now.sh
 scripts/stop_updater.sh
 
-pyextra/logentries/**
+pyextra/.gitignore
 
 rednose/**
 
@@ -474,17 +479,16 @@ opendbc/can/common.cc
 opendbc/can/common.h
 opendbc/can/common.pxd
 opendbc/can/common_dbc.h
+opendbc/can/common_pyx_setup.py
 opendbc/can/dbc.cc
 opendbc/can/dbc.py
 opendbc/can/dbc_template.cc
 opendbc/can/packer.cc
 opendbc/can/packer.py
 opendbc/can/packer_pyx.pyx
-opendbc/can/packer_pyx_setup.py
 opendbc/can/parser.cc
 opendbc/can/parser.py
 opendbc/can/parser_pyx.pyx
-opendbc/can/parser_pyx_setup.py
 opendbc/can/process_dbc.py
 opendbc/can/dbc_out/.gitkeep
 opendbc/can/dbc_out/.gitignore
@@ -508,6 +512,7 @@ opendbc/honda_civic_hatchback_ex_2017_can_generated.dbc
 opendbc/honda_civic_sedan_16_diesel_2019_can_generated.dbc
 opendbc/honda_crv_touring_2016_can_generated.dbc
 opendbc/honda_crv_ex_2017_can_generated.dbc
+opendbc/honda_crv_ex_2017_body_generated.dbc
 opendbc/honda_crv_executive_2016_can_generated.dbc
 opendbc/honda_crv_hybrid_2019_can_generated.dbc
 opendbc/honda_fit_ex_2018_can_generated.dbc
@@ -526,7 +531,10 @@ opendbc/mazda_2017.dbc
 opendbc/nissan_x_trail_2017.dbc
 opendbc/nissan_leaf_2018.dbc
 
-opendbc/subaru_global_2017.dbc
+opendbc/subaru_global_2017_generated.dbc
+opendbc/subaru_outback_2015_generated.dbc
+opendbc/subaru_outback_2019_generated.dbc
+opendbc/subaru_forester_2017_generated.dbc
 
 opendbc/toyota_rav4_hybrid_2017_pt_generated.dbc
 opendbc/toyota_rav4_2017_pt_generated.dbc
