@@ -12,12 +12,17 @@ CONTRIBUTING.md
 README.md
 RELEASES.md
 SAFETY.md
+site_scons/site_tools/cython.py
 
 apk/ai.comma*.apk
 
 common/.gitignore
 common/__init__.py
-common/android.py
+common/hardware.py
+common/hardware_android.py
+common/hardware_tici.py
+common/hardware_base.py
+common/gpio.py
 common/realtime.py
 common/clock.pyx
 common/timeout.py
@@ -26,6 +31,8 @@ common/file_helpers.py
 common/logging_extra.py
 common/numpy_fast.py
 common/params.py
+common/params_pxd.pxd
+common/params_pyx.pyx
 common/xattr.py
 common/profiler.py
 common/basedir.py
@@ -36,7 +43,6 @@ common/text_window.py
 common/cython_hacks.py
 common/apk.py
 common/SConscript
-common/common_pyx_setup.py
 
 common/kalman/.gitignore
 common/kalman/*
@@ -46,7 +52,6 @@ common/transformations/camera.py
 common/transformations/model.py
 
 common/transformations/SConscript
-common/transformations/setup.py
 common/transformations/coordinates.py
 common/transformations/coordinates.cc
 common/transformations/coordinates.hpp
@@ -76,6 +81,7 @@ selfdrive/logmessaged.py
 selfdrive/tombstoned.py
 selfdrive/pandad.py
 selfdrive/updated.py
+selfdrive/rtshield.py
 
 selfdrive/athena/__init__.py
 selfdrive/athena/athenad.py
@@ -87,7 +93,6 @@ selfdrive/boardd/__init__.py
 selfdrive/boardd/boardd.cc
 selfdrive/boardd/boardd.py
 selfdrive/boardd/boardd_api_impl.pyx
-selfdrive/boardd/boardd_setup.py
 selfdrive/boardd/can_list_to_can_capnp.cc
 selfdrive/boardd/panda.cc
 selfdrive/boardd/panda.h
@@ -211,10 +216,11 @@ selfdrive/common/visionbuf.h
 selfdrive/common/visionbuf_ion.c
 selfdrive/common/visionimg.cc
 selfdrive/common/visionimg.h
-selfdrive/common/spinner.c
-selfdrive/common/spinner.h
+
 selfdrive/common/gpio.cc
 selfdrive/common/gpio.h
+selfdrive/common/i2c.cc
+selfdrive/common/i2c.h
 
 
 selfdrive/controls/__init__.py
@@ -285,10 +291,10 @@ selfdrive/locationd/models/car_kf.py
 selfdrive/locationd/models/constants.py
 
 selfdrive/locationd/calibrationd.py
-selfdrive/locationd/calibration_helpers.py
 
 selfdrive/logcatd/SConscript
-selfdrive/logcatd/logcatd.cc
+selfdrive/logcatd/logcatd_android.cc
+selfdrive/logcatd/logcatd_systemd.cc
 
 selfdrive/proclogd/SConscript
 selfdrive/proclogd/proclogd.cc
@@ -307,11 +313,15 @@ selfdrive/loggerd/__init__.py
 selfdrive/loggerd/config.py
 selfdrive/loggerd/uploader.py
 selfdrive/loggerd/deleter.py
+selfdrive/loggerd/xattr_cache.py
 
 selfdrive/sensord/SConscript
 selfdrive/sensord/gpsd.cc
 selfdrive/sensord/libdiag.h
-selfdrive/sensord/sensors.cc
+selfdrive/sensord/sensors_qcom.cc
+selfdrive/sensord/sensors_qcom2.cc
+selfdrive/sensord/sensors/*.cc
+selfdrive/sensord/sensors/*.hpp
 selfdrive/sensord/sensord
 selfdrive/sensord/gpsd
 
@@ -329,24 +339,31 @@ selfdrive/ui/SConscript
 selfdrive/ui/*.cc
 selfdrive/ui/*.hpp
 selfdrive/ui/ui
-selfdrive/ui/spinner/Makefile
-selfdrive/ui/spinner/spinner
-selfdrive/ui/spinner/spinner.c
+selfdrive/ui/text
+selfdrive/ui/spinner
+selfdrive/ui/android/spinner/Makefile
+selfdrive/ui/android/spinner/spinner
+selfdrive/ui/android/spinner/spinner.c
 
-selfdrive/ui/text/Makefile
-selfdrive/ui/text/text
-selfdrive/ui/text/text.c
+selfdrive/ui/android/text/Makefile
+selfdrive/ui/android/text/text
+selfdrive/ui/android/text/text.c
 
 selfdrive/ui/qt/*.cc
 selfdrive/ui/qt/*.hpp
+selfdrive/ui/qt/offroad/*.cc
+selfdrive/ui/qt/offroad/*.hpp
+
+selfdrive/ui/android/*.cc
+selfdrive/ui/android/*.hpp
 
 selfdrive/camerad/SConscript
 selfdrive/camerad/main.cc
-selfdrive/camerad/bufs.h
 
 selfdrive/camerad/snapshot/*
 selfdrive/camerad/include/*
 selfdrive/camerad/cameras/camera_common.h
+selfdrive/camerad/cameras/camera_common.cc
 selfdrive/camerad/cameras/camera_frame_stream.cc
 selfdrive/camerad/cameras/camera_frame_stream.h
 selfdrive/camerad/cameras/camera_qcom.cc
@@ -371,7 +388,7 @@ selfdrive/modeld/constants.py
 selfdrive/modeld/modeld
 selfdrive/modeld/dmonitoringmodeld
 
-selfdrive/modeld/models/commonmodel.c
+selfdrive/modeld/models/commonmodel.cc
 selfdrive/modeld/models/commonmodel.h
 selfdrive/modeld/models/driving.cc
 selfdrive/modeld/models/driving.h
@@ -380,7 +397,8 @@ selfdrive/modeld/models/dmonitoring.h
 
 selfdrive/modeld/transforms/loadyuv.[c,h]
 selfdrive/modeld/transforms/loadyuv.cl
-selfdrive/modeld/transforms/transform.[c,h]
+selfdrive/modeld/transforms/transform.cc
+selfdrive/modeld/transforms/transform.h
 selfdrive/modeld/transforms/transform.cl
 
 selfdrive/modeld/thneed/thneed.*
@@ -419,6 +437,7 @@ phonelibs/libyuv/lib/**
 
 phonelibs/snpe/include/**
 phonelibs/snpe/aarch64**
+phonelibs/snpe/dsp**
 
 phonelibs/android_frameworks_native/**
 phonelibs/android_hardware_libhardware/**
@@ -427,7 +446,6 @@ phonelibs/android_system_core/**
 installer/updater/updater
 installer/updater/updater.cc
 installer/updater/update.json
-installer/updater/update_kernel.json
 installer/updater/Makefile
 
 scripts/update_now.sh
@@ -507,6 +525,7 @@ opendbc/honda_accord_s2t_2018_can_generated.dbc
 opendbc/honda_accord_lx15t_2018_can_generated.dbc
 opendbc/acura_ilx_2016_can_generated.dbc
 opendbc/acura_rdx_2018_can_generated.dbc
+opendbc/acura_rdx_2020_can_generated.dbc
 opendbc/honda_civic_touring_2016_can_generated.dbc
 opendbc/honda_civic_hatchback_ex_2017_can_generated.dbc
 opendbc/honda_civic_sedan_16_diesel_2019_can_generated.dbc
@@ -552,6 +571,7 @@ opendbc/toyota_sienna_xle_2018_pt_generated.dbc
 opendbc/lexus_is_2018_pt_generated.dbc
 opendbc/lexus_ct200h_2018_pt_generated.dbc
 opendbc/lexus_nx300h_2018_pt_generated.dbc
+opendbc/lexus_nx300_2018_pt_generated.dbc
 opendbc/toyota_adas.dbc
 opendbc/toyota_tss2_adas.dbc
 

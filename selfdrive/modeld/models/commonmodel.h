@@ -8,6 +8,7 @@
 #include <CL/cl.h>
 #endif
 
+#include <float.h>
 #include "common/mat.h"
 #include "transforms/transform.h"
 #include "transforms/loadyuv.h"
@@ -16,14 +17,11 @@
 extern "C" {
 #endif
 
+void softmax(const float* input, float* output, size_t len);
 float softplus(float input);
 float sigmoid(float input);
 
 typedef struct ModelFrame {
-  cl_device_id device_id;
-  cl_context context;
-
-  // input
   Transform transform;
   int transformed_width, transformed_height;
   cl_mem transformed_y_cl, transformed_u_cl, transformed_v_cl;
